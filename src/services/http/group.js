@@ -20,12 +20,42 @@ const getGroups = http => () =>
 const findGroups = http => search =>
   http({
     method: 'get',
-    url: `/api/group?search=${search};member=false`
+    url: `/api/group?search=${search}`
+  })
+
+const join = http => group =>
+  http({
+    method: 'get',
+    url: `/api/group/invite?id=${group.inviteCode}`
+  })
+
+const addPost = http => data =>
+  http({
+    method: 'post',
+    url: '/api/group',
+    data
+  })
+
+const submitJoinForm = http => ({ form, inviteCode }) =>
+  http({
+    method: 'post',
+    url: `/api/group/invite/participant?id=${inviteCode}`,
+    data: form
+  })
+
+const getParticipants = http => id =>
+  http({
+    method: 'get',
+    url: `/api/group/${id}/participants`
   })
 
 export default http => ({
   getPosts: getPosts(http),
   create: create(http),
   getGroups: getGroups(http),
-  findGroups: findGroups(http)
+  findGroups: findGroups(http),
+  join: join(http),
+  addPost: addPost(http),
+  submitJoinForm: submitJoinForm(http),
+  getParticipants: getParticipants(http)
 })

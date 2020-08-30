@@ -1,21 +1,33 @@
 <template>
-  <form action="" class="findGroup col">
+  <form class="findGroup col" v-if="step === 0">
     <section class="col">
-      <label for="">search for groups</label>
+      <label for="">explore groups:</label>
       <input
         type="text"
         name=""
-        id=""
         v-model="search"
         @input="fetchGroups"
-        autofocus
+        v-autofocus
       />
     </section>
     <ul class="groups">
       <li v-for="(item, index) in results" :key="index">
-        {{ item }}
+        <strong>
+          {{ item.name }}
+        </strong>
+        | {{ item.category }} | {{ item.participantCount }}
+        <button :disabled="item.member" @click.prevent="joinGroup(item)">
+          join
+        </button>
       </li>
     </ul>
+  </form>
+  <form class="col" v-else @submit.prevent="submitForm">
+    <div class="col" v-for="(item, key) in form" :key="key">
+      <label>{{ key }}</label>
+      <input type="text" v-model="form[key]" />
+    </div>
+    <button type="submit">join</button>
   </form>
 </template>
 
@@ -25,7 +37,10 @@ import { debounce } from 'lodash'
 export default {
   data: () => ({
     search: '',
-    results: []
+    results: [],
+    step: 0,
+    form: {},
+    inviteCode: ''
   }),
   methods: {
     fetchGroups: debounce(async function() {
@@ -36,7 +51,31 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    }, 1000)
+    }, 1000),
+    async joinGroup(group) {
+      try {
+        const { data } = await this.$http.group.join(group)
+
+        Object.assign(this.form, data.form)
+
+        this.inviteCode = group.inviteCode
+        this.step++
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async submitForm() {
+      try {
+        await this.$http.group.submitJoinForm({
+          form: this.form,
+          inviteCode: this.inviteCode
+        })
+
+        this.$eventBus.$emit('close-modal')
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 }
 </script>

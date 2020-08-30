@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import '@/components/global'
 import http from '@/services/http/index'
+import '@/mixins/global'
+import '@/directives/global'
 
 Vue.config.productionTip = false
 

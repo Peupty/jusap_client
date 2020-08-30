@@ -24,15 +24,15 @@ export default {
     modalOpen: false
   }),
   mounted() {
-    this.$eventBus.$on('open-modal', this.openModal)
+    this.$eventBus.$on('open-modal', this.openModalWindow)
     this.$eventBus.$on('close-modal', this.closeModal)
   },
   beforeDestroy() {
-    this.$eventBus.$off('open-modal', this.openModal)
+    this.$eventBus.$off('open-modal', this.openModalWindow)
     this.$eventBus.$off('close-modal', this.closeModal)
   },
   methods: {
-    openModal(component) {
+    openModalWindow(component) {
       this.modal = component
       this.modalOpen = true
     },

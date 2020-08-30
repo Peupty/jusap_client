@@ -6,16 +6,13 @@
 </template>
 
 <script>
-import createGroup from '@/components/modals/createGroup.vue'
-import findGroup from '@/components/modals/findGroup.vue'
-
 export default {
   methods: {
     createGroup() {
-      this.$eventBus.$emit('open-modal', createGroup)
+      this.openModal('createGroup')
     },
     findGroup() {
-      this.$eventBus.$emit('open-modal', findGroup)
+      this.openModal('findGroup')
     }
   }
 }

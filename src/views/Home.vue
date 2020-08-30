@@ -1,14 +1,14 @@
 <template>
   <div class="home col">
     <div class="toolbar row">
-      <button @click="openModal">Add group</button>
+      <button @click="addGroup">Add group</button>
       <button @click="!editable ? (editable = true) : saveLayout()">
         {{ editable ? 'save' : 'edit layout' }}
       </button>
       <button @click="createLayout">Create Layout</button>
     </div>
     <grid-layout
-      :layout="layout"
+      :layout="layout.groups"
       :col-num="24"
       :row-height="30"
       :is-draggable="editable"
@@ -17,11 +17,11 @@
       :vertical-compact="true"
       :margin="[10, 10]"
       :use-css-transforms="true"
-      v-if="layout.length"
+      v-if="layout.groups.length"
     >
       <grid-item
         class="groupTile"
-        v-for="item in layout"
+        v-for="item in layout.groups"
         :key="item.i"
         :i="item.i"
         :x="item.x"
@@ -36,8 +36,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import addGroupModal from '@/components/modals/addGroup.vue'
-import createLayoutModal from '@/components/modals/createLayout.vue'
 
 export default {
   name: 'Home',
@@ -54,19 +52,27 @@ export default {
     this.fetchGroups()
   },
   methods: {
-    openModal() {
-      this.$eventBus.$emit('open-modal', addGroupModal)
+    addGroup() {
+      this.openModal('addGroup')
     },
-    saveLayout() {
-      this.editable = false
+    async saveLayout() {
+      try {
+        await this.$http.user.editLayout(this.layout)
+
+        this.editable = false
+      } catch (error) {
+        console.log(error)
+      }
     },
-    fetchGroups() {
+    async fetchGroups() {
       if (this.$store.state.user.loggedIn) {
-        this.$store.dispatch('user/fetchGroups')
+        await this.$store.dispatch('user/fetchGroups')
+
+        this.$store.commit('settings/SET_ACTIVE_LAYOUT')
       }
     },
     createLayout() {
-      this.$eventBus.$emit('open-modal', createLayoutModal)
+      this.openModal('createLayout')
     }
   }
 }

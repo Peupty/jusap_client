@@ -1,11 +1,13 @@
-import { setState } from '../utlils'
+import { setState } from '../utils'
 import http from '@/services/http/index'
+import chatService from '@/services/chat/index'
 
 const state = {
   loggedIn: false,
   token: null,
   id: null,
-  groups: null
+  groups: null,
+  stompClient: null
 }
 
 const mutations = {
@@ -18,12 +20,16 @@ const mutations = {
 }
 
 const actions = http => ({
-  async logIn({ commit }, credentials) {
+  async logIn({ commit, dispatch }, credentials) {
     try {
       const { data } = await http.user.logIn(credentials)
+      const { layouts } = data
 
       commit('SET_STATUS', true)
       commit('SET_STATE', data)
+      commit('settings/SET_STATE', { layouts }, { root: true })
+
+      await dispatch('socketConnection', data.id)
 
       return Promise.resolve()
     } catch (err) {
@@ -37,6 +43,15 @@ const actions = http => ({
       commit('SET_STATE', { groups })
     } catch (e) {
       console.log(e)
+    }
+  },
+  async socketConnection({ commit }, id) {
+    try {
+      const stompClient = chatService.connect(id)
+
+      commit('SET_STATE', { stompClient })
+    } catch (error) {
+      console.log(error)
     }
   }
 })
