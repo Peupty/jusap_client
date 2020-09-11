@@ -1,14 +1,13 @@
 <template>
-  <div>
-    <h2 @click="fetchUsers">{{ chat.name }}</h2>
-
+  <div class="group">
+    <h4 @click="fetchUsers" class="group__name">{{ chat.name }}</h4>
     <ul class="users col" v-if="open && users.length">
       <li
-        v-for="user in users"
+        v-for="user in otherUsers"
         :key="user.id"
         @click="openConversation(user.id)"
       >
-        <h4>{{ user.nickname }}</h4>
+        <p>{{ user.nickname }}</p>
       </li>
     </ul>
   </div>
@@ -32,6 +31,11 @@ export default {
       users: []
     }
   },
+  computed: {
+    otherUsers() {
+      return this.users.filter(el => el.id !== this.participantId)
+    }
+  },
   methods: {
     async fetchUsers() {
       try {
@@ -45,7 +49,7 @@ export default {
     },
     openConversation(id) {
       const url = `/app/conversation/new/${id}`
-      this.$store.state.user.stompClient.send(
+      this.$store.state.chats.stompClient.send(
         url,
         {},
         JSON.stringify({
@@ -58,4 +62,26 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.group {
+  text-align: start;
+  margin-left: 10px;
+
+  &__name {
+    cursor: pointer;
+
+    &:hover {
+      background: #8698c9;
+    }
+  }
+}
+.users {
+  margin-left: 10px;
+  list-style-type: none;
+
+  li:hover {
+    cursor: pointer;
+    background: #8698c9;
+  }
+}
+</style>

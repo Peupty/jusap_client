@@ -10,19 +10,31 @@
       </router-link>
     </div>
     <router-view />
-    <component :is="modal" v-if="modalOpen" class="modal"></component>
+    <div class="modal col" v-if="modalOpen">
+      <h3 @click="closeModal" class="modal__close">X</h3>
+      <component
+        :is="modal"
+        :modalProps="modalProps"
+        class="modal__window"
+      ></component>
+    </div>
   </div>
 </template>
 
 <script>
-import { routes } from '@/router/index'
+import { routes, protectedRoutes } from '@/router/index'
 
 export default {
   data: () => ({
-    routes,
     modal: null,
-    modalOpen: false
+    modalOpen: false,
+    modalProps: {}
   }),
+  computed: {
+    routes() {
+      return this.$store.getters['user/loggedIn'] ? protectedRoutes : routes
+    }
+  },
   mounted() {
     this.$eventBus.$on('open-modal', this.openModalWindow)
     this.$eventBus.$on('close-modal', this.closeModal)
@@ -32,7 +44,8 @@ export default {
     this.$eventBus.$off('close-modal', this.closeModal)
   },
   methods: {
-    openModalWindow(component) {
+    openModalWindow({ component, props }) {
+      this.modalProps = props
       this.modal = component
       this.modalOpen = true
     },
@@ -80,15 +93,39 @@ export default {
   flex-direction: row;
 }
 .modal {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid #000;
-  padding: 50px;
-  background: #fff;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
+  background: #52525254;
+
+  &__window {
+    padding: 50px;
+    border: 1px solid #000;
+    background: #fff;
+    max-width: 75%;
+  }
+
+  &__close {
+    margin-left: auto;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    background: #fff;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
 
   input,
   button {

@@ -1,6 +1,6 @@
 const gridWidth = 24
 const itemWidth = 8
-const itemHeight = 5
+const itemHeight = 8
 const cols = gridWidth / itemWidth
 
 export default {

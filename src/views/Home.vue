@@ -7,30 +7,42 @@
       </button>
       <button @click="createLayout">Create Layout</button>
     </div>
-    <grid-layout
-      :layout="layout.groups"
-      :col-num="24"
-      :row-height="30"
-      :is-draggable="editable"
-      :is-resizable="editable"
-      :is-mirrored="false"
-      :vertical-compact="true"
-      :margin="[10, 10]"
-      :use-css-transforms="true"
-      v-if="layout.groups.length"
-    >
-      <grid-item
-        class="groupTile"
-        v-for="item in layout.groups"
-        :key="item.i"
-        :i="item.i"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        ><app-group :id="item.i"></app-group
-      ></grid-item>
-    </grid-layout>
+    <section>
+      <button
+        v-for="(item, index) in layouts"
+        @click="selectLayout(index)"
+        :key="index"
+        :disabled="item === layout"
+        :class="{ 'button--green': item === layout }"
+      >
+        {{ item.name }}
+      </button>
+    </section>
+    <main v-if="layout && layout.groups.length">
+      <grid-layout
+        :layout="layout.groups"
+        :col-num="24"
+        :row-height="32"
+        :is-draggable="editable"
+        :is-resizable="editable"
+        :is-mirrored="false"
+        :vertical-compact="true"
+        :margin="[10, 10]"
+        :use-css-transforms="true"
+      >
+        <grid-item
+          class="groupTile"
+          v-for="item in layout.groups"
+          :key="item.i"
+          :i="item.i"
+          :x="item.x"
+          :y="item.y"
+          :w="item.w"
+          :h="item.h"
+          ><app-group :id="item.i"></app-group
+        ></grid-item>
+      </grid-layout>
+    </main>
   </div>
 </template>
 
@@ -45,6 +57,7 @@ export default {
   computed: {
     ...mapState({
       layout: state => state.settings.activeLayout,
+      layouts: state => state.settings.layouts,
       userId: state => state.user.id
     })
   },
@@ -73,6 +86,9 @@ export default {
     },
     createLayout() {
       this.openModal('createLayout')
+    },
+    selectLayout(index) {
+      this.$store.commit('settings/SET_ACTIVE_LAYOUT', index)
     }
   }
 }
@@ -90,7 +106,7 @@ export default {
   height: 100%;
 }
 .groupTile {
-  background: #7a7a7a;
+  // background: #7a7a7a;
   color: #000;
 }
 .home {
@@ -98,5 +114,11 @@ export default {
 }
 .toolbar {
   justify-content: center;
+}
+.button {
+  &--green {
+    background: lightgreen;
+    border-color: lightgreen;
+  }
 }
 </style>

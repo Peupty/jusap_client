@@ -1,10 +1,17 @@
 <template>
-  <div class="group col">
-    <div class="row">
-      <h3>
-        {{ group.name }}
-      </h3>
-      <div class="settings" v-if="isAdmin">settings</div>
+  <div class="group col" :style="{ background: group.color }">
+    <div class="row group__toolbar">
+      <h3>{{ group.name }}</h3>
+      <div>
+        <button
+          class="settings"
+          v-if="isAdmin"
+          @click.prevent="openSettings(group)"
+        >
+          settings
+        </button>
+        <button @click.prevent="refresh">refresh</button>
+      </div>
     </div>
     <form @submit.prevent="addPost" class="row">
       <input type="text" v-model="post.content" />
@@ -14,6 +21,7 @@
       <div class="posts">
         <app-post v-for="post in posts" :key="post.id" :post="post"></app-post>
       </div>
+      <button @click="loadPosts">load more</button>
     </section>
   </div>
 </template>
@@ -28,13 +36,16 @@ export default {
   },
   data() {
     return {
-      page: 0,
+      page: 2,
       post: null
     }
   },
   computed: {
     group() {
       return this.$store.getters['user/getGroup'](this.id).group
+    },
+    user() {
+      return this.$store.getters['user/getGroup'](this.id)
     },
     posts() {
       return this.$store.getters['user/getGroup'](this.id).posts
@@ -52,20 +63,41 @@ export default {
   created() {
     this.post = this.createNewPost()
   },
+  mounted() {},
   methods: {
-    async addPost() {
-      try {
-        await this.$http.group.addPost(this.post)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     createNewPost() {
       return {
         groupId: this.id,
         participantId: this.participantId,
         content: ''
       }
+    },
+    async addPost() {
+      try {
+        await this.$http.group.addPost(this.post)
+
+        this.post = this.createNewPost()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    openSettings(group) {
+      this.openModal('groupSettings', group)
+    },
+    loadPosts() {
+      try {
+        this.$store.dispatch('user/fetchPosts', {
+          id: this.id,
+          page: this.page
+        })
+
+        this.page++
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async refresh() {
+      this.$store.dispatch('user/refreshGroup', this.id)
     }
   }
 }
@@ -76,10 +108,22 @@ export default {
   overflow: hidden;
   height: 100%;
   padding-bottom: 20px;
+  border: 1px solid #000;
+
+  &__toolbar {
+    border-bottom: 1px solid #000;
+    margin: 10px 0;
+    padding: 0 5px;
+    justify-content: space-between;
+    align-items: center;
+  }
 
   &__content {
     height: 100%;
     overflow: auto;
   }
+}
+form {
+  margin-left: 10px;
 }
 </style>

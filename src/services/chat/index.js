@@ -1,5 +1,6 @@
 import SockJS from 'sockjs-client'
 import { Stomp } from '@stomp/stompjs/esm6/compatibility/stomp'
+import store from '@/store/index'
 
 const connect = id => {
   const socket = new SockJS('http://localhost:8080/websocketApp')
@@ -15,7 +16,19 @@ const connectionSuccess = (stompClient, id) => {
 }
 
 const handleMessage = payload => {
-  console.log(payload)
+  const data = JSON.parse(payload.body)
+  const { type } = data
+
+  switch (type) {
+    case 'NEW':
+      store.commit('chats/CREATE_CONVERSATION', data)
+      break
+    case 'CHAT':
+      store.commit('chats/ADD_MESSAGE', data)
+      break
+    default:
+      break
+  }
 }
 
 export default {

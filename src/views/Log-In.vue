@@ -1,10 +1,10 @@
 <template>
-  <form @submit.prevent="submitForm" name="sign in">
-    <section>
+  <form @submit.prevent="submitForm" name="sign in" class="col">
+    <section class="col">
       <label for="">Email:</label>
       <input type="email" name="" v-model="email" ref="email" v-autofocus />
     </section>
-    <section>
+    <section class="col">
       <label for="">Password:</label>
       <input type="password" name="" v-model="password" ref="password" />
     </section>
@@ -35,4 +35,16 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+form {
+  input, button {
+    width: 300px;
+  }
+  button {
+    margin-top: 15px;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

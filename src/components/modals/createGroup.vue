@@ -20,6 +20,10 @@
         <input type="checkbox" v-model="group.accept" />
       </div>
       <div class="row">
+        <label>Color</label>
+        <input type="color" v-model="group.color">
+      </div>
+      <div class="row">
         <label for="">form:</label>
         <input type="checkbox" v-model="form" @change="toggleQuestionnaire" />
       </div>
@@ -62,7 +66,8 @@ export default {
         imagePath: '',
         accept: 0,
         private: 0,
-        reactionId: 1
+        reactionId: 1,
+        color: ''
       }
     },
     async onSubmit() {

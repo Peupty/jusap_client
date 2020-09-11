@@ -2,20 +2,16 @@
   <form class="findGroup col" v-if="step === 0">
     <section class="col">
       <label for="">explore groups:</label>
-      <input
-        type="text"
-        name=""
-        v-model="search"
-        @input="fetchGroups"
-        v-autofocus
-      />
+      <input type="text" v-model="search" @input="fetchGroups" v-autofocus />
     </section>
-    <ul class="groups">
-      <li v-for="(item, index) in results" :key="index">
-        <strong>
-          {{ item.name }}
-        </strong>
-        | {{ item.category }} | {{ item.participantCount }}
+    <ul class="groups col">
+      <li v-for="(item, index) in results" :key="index" class="groups__item">
+        <p>
+          <strong>
+            {{ item.name }}
+          </strong>
+          | {{ item.category }} | {{ item.participantCount }}
+        </p>
         <button :disabled="item.member" @click.prevent="joinGroup(item)">
           join
         </button>
@@ -80,4 +76,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.groups {
+  text-align: start;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+</style>

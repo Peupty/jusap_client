@@ -6,6 +6,9 @@ import '@/components/global'
 import http from '@/services/http/index'
 import '@/mixins/global'
 import '@/directives/global'
+import VueChatScroll from 'vue-chat-scroll'
+
+Vue.use(VueChatScroll)
 
 Vue.config.productionTip = false
 

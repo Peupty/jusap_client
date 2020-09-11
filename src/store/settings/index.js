@@ -14,9 +14,8 @@ const mutations = {
   ADD_LAYOUT(state, layout) {
     state.layouts.push(layout)
   },
-  SET_ACTIVE_LAYOUT(state, index) {
-    if (index) state.activeLayout.groups = state.layouts[index]
-    else state.activeLayout = state.layouts[state.layouts.length - 1]
+  SET_ACTIVE_LAYOUT(state, index = 0) {
+    state.activeLayout = state.layouts[index]
   }
 }
 

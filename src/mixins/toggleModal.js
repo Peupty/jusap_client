@@ -3,8 +3,8 @@ import modals from '@/components/modals/index.js'
 function mixin(modals) {
   return {
     methods: {
-      openModal(modal) {
-        this.$eventBus.$emit('open-modal', modals[modal])
+      openModal(modal, props) {
+        this.$eventBus.$emit('open-modal', { component: modals[modal], props })
       }
     }
   }

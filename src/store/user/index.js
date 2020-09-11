@@ -6,8 +6,7 @@ const state = {
   loggedIn: false,
   token: null,
   id: null,
-  groups: null,
-  stompClient: null
+  groups: null
 }
 
 const mutations = {
@@ -16,6 +15,12 @@ const mutations = {
   },
   SET_STATUS(state, value) {
     state.loggedIn = value
+  },
+  ADD_POSTS(state, { id, data }) {
+    state.groups.find(el => el.group.id === id).posts.push(...data)
+  },
+  REFRESH_GROUP(state, { id, data }) {
+    state.groups.find(el => el.group.id === id).posts = data
   }
 }
 
@@ -45,19 +50,46 @@ const actions = http => ({
       console.log(e)
     }
   },
+  async fetchPosts({ commit }, { id, page }) {
+    try {
+      const { data } = await http.group.getPosts(id, page)
+
+      if (page < data.totalPages) {
+        commit('ADD_POSTS', { data: data.content, id })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async refreshGroup({ commit }, id) {
+    try {
+      const { data } = await http.group.getPosts(id, 1)
+
+      commit('REFRESH_GROUP', { data: data.content, id })
+    } catch (error) {
+      console.log(error)
+    }
+  },
   async socketConnection({ commit }, id) {
     try {
       const stompClient = chatService.connect(id)
 
-      commit('SET_STATE', { stompClient })
+      commit('chats/SET_STATE', { stompClient }, { root: true })
     } catch (error) {
       console.log(error)
     }
+  },
+  async fetchUser({ commit }, id) {
+    // To Do
+    const er = new Error('asda')
+
+    return Promise.reject(er)
   }
 })
 
 const getters = {
-  getGroup: state => id => state.groups.find(el => el.group.id === id)
+  getGroup: state => id => state.groups.find(el => el.group.id === id),
+  loggedIn: state => state.loggedIn
 }
 
 export default {
