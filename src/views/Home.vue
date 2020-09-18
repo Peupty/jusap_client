@@ -7,7 +7,7 @@
       </button>
       <button @click="createLayout">Create Layout</button>
     </div>
-    <section>
+    <div>
       <button
         v-for="(item, index) in layouts"
         @click="selectLayout(index)"
@@ -17,7 +17,7 @@
       >
         {{ item.name }}
       </button>
-    </section>
+    </div>
     <main v-if="layout && layout.groups.length">
       <grid-layout
         :layout="layout.groups"
@@ -28,7 +28,7 @@
         :is-mirrored="false"
         :vertical-compact="true"
         :margin="[10, 10]"
-        :use-css-transforms="true"
+        :use-css-transforms="!true"
       >
         <grid-item
           class="groupTile"
@@ -96,7 +96,6 @@ export default {
 
 <style lang="scss" scoped>
 .vue-grid-layout {
-  border: 1px solid black;
   max-height: 100vh;
   min-height: 100vh;
   width: 100%;
@@ -117,8 +116,7 @@ export default {
 }
 .button {
   &--green {
-    background: lightgreen;
-    border-color: lightgreen;
+    background-color: lightgreen;
   }
 }
 </style>

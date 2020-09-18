@@ -1,7 +1,7 @@
 <template>
   <form class="col" @submit.prevent="createLayout">
     <label for="">name</label>
-    <input type="text" name="" v-model="layout.name" />
+    <input type="text" name="" v-model="layout.name" required />
     <ul>
       <li
         v-for="(item, index) in groups"
@@ -34,13 +34,18 @@ export default {
   },
   methods: {
     toggleGroup(group) {
-      if (!this.layout.groups.includes(group)) {
+      const index = this.layout.groups.findIndex(el => el.name === group.name)
+
+      if (index < 0) {
         this.layout.groups.push(group)
+      } else {
+        this.layout.groups.splice(index, 1)
       }
     },
     async createLayout() {
       try {
         const layout = layoutFactory.create(this.layout)
+
         await this.$store.dispatch('settings/createLayout', layout)
 
         this.$eventBus.$emit('close-modal')

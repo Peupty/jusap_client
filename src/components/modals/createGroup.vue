@@ -2,13 +2,13 @@
   <form class="col" @submit.prevent="onSubmit">
     <section class="col">
       <label for="">group name:</label>
-      <input type="text" name="" v-model="group.name" v-autofocus />
-      <label for="">nickname</label>
-      <input type="text" v-model="group.nickname" />
+      <input type="text" name="" v-model="group.name" v-autofocus required/>
+      <label for="">nickname:</label>
+      <input type="text" v-model="group.nickname" required/>
       <label for="">category:</label>
-      <input type="text" name="" v-model="group.category" />
+      <input type="text" name="" v-model="group.category" required/>
       <label for="">description:</label>
-      <input type="textarea" name="" v-model="group.description" />
+      <input type="textarea" name="" v-model="group.description" required/>
     </section>
     <section class="col">
       <div class="row">
@@ -16,12 +16,12 @@
         <input type="checkbox" v-model="group.private" />
       </div>
       <div class="row">
-        <label for="">auto accept users:</label>
+        <label for="">require accept:</label>
         <input type="checkbox" v-model="group.accept" />
       </div>
       <div class="row">
         <label>Color</label>
-        <input type="color" v-model="group.color">
+        <input type="color" v-model="group.color" />
       </div>
       <div class="row">
         <label for="">form:</label>
@@ -74,7 +74,7 @@ export default {
       try {
         await this.$http.group.create(this.group)
 
-        this.group = this.createNewGroup()
+        this.$eventBus.$emit('close-modal')
       } catch (e) {
         alert(e)
       }

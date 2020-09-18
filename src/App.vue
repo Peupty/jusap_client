@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link
-        v-for="(route, index) in routes"
-        :key="index"
-        :to="route.path"
-      >
-        {{ route.name }}
-      </router-link>
+    <div id="nav" class="row">
+      <div class="row">
+        <router-link
+          v-for="(route, index) in routes"
+          :key="index"
+          :to="route.path"
+        >
+          {{ route.name }}
+        </router-link>
+      </div>
+      <button @click="logOut" v-if="loggedIn">log out</button>
     </div>
     <router-view />
     <div class="modal col" v-if="modalOpen">
-      <h3 @click="closeModal" class="modal__close">X</h3>
+      <button @click="closeModal" class="modal__close">X</button>
       <component
         :is="modal"
         :modalProps="modalProps"
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-import { routes, protectedRoutes } from '@/router/index'
+import { protectedRoutes } from '@/router/index'
 
 export default {
   data: () => ({
@@ -32,7 +35,10 @@ export default {
   }),
   computed: {
     routes() {
-      return this.$store.getters['user/loggedIn'] ? protectedRoutes : routes
+      return this.loggedIn ? protectedRoutes : []
+    },
+    loggedIn() {
+      return this.$store.getters['user/loggedIn']
     }
   },
   mounted() {
@@ -52,6 +58,13 @@ export default {
     closeModal() {
       this.modal = null
       this.modalOpen = false
+    },
+    async logOut() {
+      try {
+        await this.$http.user.logOut()
+
+        location.reload()
+      } catch (error) {}
     }
   }
 }
@@ -74,10 +87,12 @@ export default {
 
 #nav {
   padding: 30px;
+  justify-content: space-between;
 
   a {
     font-weight: bold;
     color: #2c3e50;
+    margin: 0 5px;
 
     &.router-link-exact-active {
       color: #42b983;
@@ -91,6 +106,10 @@ export default {
 .row {
   display: flex;
   flex-direction: row;
+}
+button {
+  margin: 0 2px;
+  padding: 0 10px;
 }
 .modal {
   position: fixed;
@@ -113,18 +132,11 @@ export default {
 
   &__close {
     margin-left: auto;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 50%;
-    background: #fff;
-    width: 30px;
-    height: 30px;
     position: absolute;
+    padding: 10px;
+    background: #fff;
     top: 20px;
     right: 20px;
-    align-items: center;
-    justify-content: center;
-    display: flex;
   }
 
   input,

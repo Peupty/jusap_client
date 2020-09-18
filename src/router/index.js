@@ -30,6 +30,15 @@ export const protectedRoutes = [
     meta: {
       auth: true
     }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () =>
+      import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
+    meta: {
+      auth: true
+    }
   }
 ]
 
@@ -54,6 +63,7 @@ router.beforeEach(async (to, from, next) => {
 const autoLogIn = async (store, next) => {
   try {
     await store.dispatch('user/fetchUser')
+    next()
   } catch (error) {
     return next({ path: '/login' })
   }

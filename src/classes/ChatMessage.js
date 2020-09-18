@@ -1,6 +1,6 @@
 export default class ChatMessage {
   constructor({ participantId, content }) {
-    this.author = participantId
+    this.participantId = participantId
     this.content = content
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="group col" :style="{ background: group.color }">
     <div class="row group__toolbar">
-      <h3>{{ group.name }}</h3>
+      <h3>{{ group.name }} | {{ user.nickname }}</h3>
       <div>
         <button
           class="settings"

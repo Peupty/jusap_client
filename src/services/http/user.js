@@ -5,6 +5,18 @@ const logIn = http => data =>
     data
   })
 
+const logOut = http => () =>
+  http({
+    method: 'get',
+    url: '/api/logout'
+  })
+
+const getData = http => () =>
+  http({
+    method: 'get',
+    url: '/api/me'
+  })
+
 const createLayout = http => layout =>
   http({
     method: 'post',
@@ -29,5 +41,7 @@ export default http => ({
   logIn: logIn(http),
   createLayout: createLayout(http),
   editLayout: editLayout(http),
-  deleteLayout: deleteLayout(http)
+  deleteLayout: deleteLayout(http),
+  getData: getData(http),
+  logOut: logOut(http)
 })

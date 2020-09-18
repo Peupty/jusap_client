@@ -4,14 +4,20 @@
       <p>
         {{ conversation.id }}
       </p>
-      <button class="closeButton" @click="closeConversation(conversation.id)">
-        X
-      </button>
+      <div class="row">
+        <button @click="openConversationSettings">+</button>
+        <button class="closeButton" @click="closeConversation(conversation.id)">
+          X
+        </button>
+      </div>
     </div>
     <div class="conversation__content col" v-chat-scroll>
       <div
         v-for="(msg, index) in conversation.content"
-        :class="['message', { message__own: msg.author === conversation.user }]"
+        :class="[
+          'message',
+          { message__own: msg.participantId === conversation.user }
+        ]"
         :key="index"
       >
         <p>{{ msg.content }}</p>
@@ -31,7 +37,6 @@ export default {
   props: ['conversation'],
   data() {
     return {
-      data: [],
       message: ''
     }
   },
@@ -56,6 +61,10 @@ export default {
           type: 'CHAT'
         })
       )
+      this.message = ''
+    },
+    openConversationSettings() {
+      this.openModal('conversationSettings', this.conversation)
     }
   }
 }
@@ -74,11 +83,14 @@ export default {
 
   &__content {
     height: 100%;
+    width: 100%;
     background: #b3b3b3;
     overflow: auto;
   }
 }
 .message {
+  background: #d6d6d6;
+
   &__own {
     background: green;
   }

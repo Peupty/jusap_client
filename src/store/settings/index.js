@@ -16,6 +16,11 @@ const mutations = {
   },
   SET_ACTIVE_LAYOUT(state, index = 0) {
     state.activeLayout = state.layouts[index]
+  },
+  DELETE_LAYOUT(state, name) {
+    const index = state.layouts.findIndex(el => el.name === name)
+
+    if (index >= 0) state.layouts.splice(index, 1)
   }
 }
 
@@ -26,6 +31,15 @@ const actions = http => ({
 
       commit('ADD_LAYOUT', layout)
       commit('SET_ACTIVE_LAYOUT')
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async deleteLayout({ commit }, name) {
+    try {
+      await http.user.deleteLayout(name)
+
+      commit('DELETE_LAYOUT', name)
     } catch (error) {
       console.log(error)
     }

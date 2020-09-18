@@ -26,6 +26,9 @@ const handleMessage = payload => {
     case 'CHAT':
       store.commit('chats/ADD_MESSAGE', data)
       break
+    case 'GROUP':
+      store.dispatch('user/refreshGroup', data.id)
+      break
     default:
       break
   }

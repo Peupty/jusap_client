@@ -1,7 +1,7 @@
 <template>
   <div class="group">
-    <h4 @click="fetchUsers" class="group__name">{{ chat.name }}</h4>
-    <ul class="users col" v-if="open && users.length">
+    <h4 @click="toggle" class="group__name">{{ chat.name }}</h4>
+    <ul class="users col" v-if="open && otherUsers.length">
       <li
         v-for="user in otherUsers"
         :key="user.id"
@@ -10,6 +10,9 @@
         <p>{{ user.nickname }}</p>
       </li>
     </ul>
+    <div v-if="open && !otherUsers.length">
+      <p>No users in group</p>
+    </div>
   </div>
 </template>
 
@@ -37,6 +40,14 @@ export default {
     }
   },
   methods: {
+    async toggle() {
+      if (this.open) {
+        this.open = false
+      } else {
+        await this.fetchUsers()
+        this.open = true
+      }
+    },
     async fetchUsers() {
       try {
         const { data } = await this.$http.group.getParticipants(this.chat.id)
@@ -71,7 +82,7 @@ export default {
     cursor: pointer;
 
     &:hover {
-      background: #8698c9;
+      background: skyblue;
     }
   }
 }
@@ -81,7 +92,7 @@ export default {
 
   li:hover {
     cursor: pointer;
-    background: #8698c9;
+    background: skyblue;
   }
 }
 </style>

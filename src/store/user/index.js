@@ -41,6 +41,23 @@ const actions = http => ({
       return Promise.reject(err)
     }
   },
+  async fetchUser({ commit, dispatch }) {
+    try {
+      const { data } = await http.user.getData()
+      const { layouts } = data
+
+      commit('SET_STATUS', true)
+      commit('SET_STATE', data)
+      commit('settings/SET_STATE', { layouts }, { root: true })
+
+      await dispatch('fetchGroups')
+      await dispatch('socketConnection', data.id)
+
+      return Promise.resolve()
+    } catch (err) {
+      return Promise.reject(err)
+    }
+  },
   async fetchGroups({ commit }) {
     try {
       const { data: groups } = await http.group.getGroups()
@@ -78,12 +95,6 @@ const actions = http => ({
     } catch (error) {
       console.log(error)
     }
-  },
-  async fetchUser({ commit }, id) {
-    // To Do
-    const er = new Error('asda')
-
-    return Promise.reject(er)
   }
 })
 

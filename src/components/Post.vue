@@ -15,9 +15,7 @@ export default {
     }
   },
   methods: {
-    react() {
-
-    }
+    react() {}
   }
 }
 </script>
@@ -36,7 +34,7 @@ export default {
     word-wrap: break-word;
   }
   &__react {
-    width: 50px;
+    max-width: 100px;
   }
 }
 </style>
