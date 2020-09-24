@@ -20,11 +20,12 @@
         ]"
         :key="index"
       >
+        <h4>{{ conversation.userList[msg.participantId] }}</h4>
         <p>{{ msg.content }}</p>
       </div>
     </div>
     <form class="row" @submit.prevent="sendMessage">
-      <input type="text" v-model="message" />
+      <input type="text" v-model="message" required />
       <button type="submit">SEND</button>
     </form>
   </div>
@@ -50,17 +51,19 @@ export default {
       this.$store.commit('chats/CLOSE_CONVERSATION', id)
     },
     sendMessage() {
-      const url = `/app/conversation/${this.conversation.id}/sendmessage`
+      if (this.message.trim().length) {
+        const url = `/app/conversation/${this.conversation.id}/sendmessage`
 
-      this.$store.state.chats.stompClient.send(
-        url,
-        {},
-        JSON.stringify({
-          participantId: this.conversation.user,
-          content: this.message,
-          type: 'CHAT'
-        })
-      )
+        this.$store.state.chats.stompClient.send(
+          url,
+          {},
+          JSON.stringify({
+            participantId: this.conversation.user,
+            content: this.message,
+            type: 'CHAT'
+          })
+        )
+      }
       this.message = ''
     },
     openConversationSettings() {
@@ -90,8 +93,14 @@ export default {
 }
 .message {
   background: #d6d6d6;
+  width: 70%;
+  align-self: flex-start;
+  margin-bottom: 5px;
+  text-align: left;
 
   &__own {
+    align-self: flex-end;
+    text-align: right;
     background: green;
   }
 }

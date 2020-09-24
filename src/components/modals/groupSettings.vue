@@ -47,7 +47,7 @@ export default {
         await this.$http.group.acceptRequests(this.data.id, this.users)
         this.$eventBus.$emit('close-modal')
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     onUserAccept(users) {

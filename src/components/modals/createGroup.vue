@@ -76,7 +76,7 @@ export default {
 
         this.$eventBus.$emit('close-modal')
       } catch (e) {
-        alert(e)
+        this.$alert.display(e)
       }
     },
     addQuestion() {

@@ -62,6 +62,12 @@ const acceptRequests = http => (id, users) =>
     data: users
   })
 
+const leave = http => id =>
+  http({
+    method: 'delete',
+    url: `/api/group/${id}/leave`
+  })
+
 export default http => ({
   getPosts: getPosts(http),
   create: create(http),
@@ -72,5 +78,6 @@ export default http => ({
   submitJoinForm: submitJoinForm(http),
   getParticipants: getParticipants(http),
   getJoinRequests: getJoinRequests(http),
-  acceptRequests: acceptRequests(http)
+  acceptRequests: acceptRequests(http),
+  leave: leave(http)
 })

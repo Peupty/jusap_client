@@ -78,7 +78,7 @@ export default {
 
         this.post = this.createNewPost()
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     openSettings(group) {
@@ -93,7 +93,7 @@ export default {
 
         this.page++
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     async refresh() {

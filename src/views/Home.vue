@@ -12,7 +12,7 @@
         v-for="(item, index) in layouts"
         @click="selectLayout(index)"
         :key="index"
-        :disabled="item === layout"
+        :disabled="editable || item === layout"
         :class="{ 'button--green': item === layout }"
       >
         {{ item.name }}
@@ -29,6 +29,7 @@
         :vertical-compact="true"
         :margin="[10, 10]"
         :use-css-transforms="!true"
+        :class="{ bordered: editable }"
       >
         <grid-item
           class="groupTile"
@@ -70,11 +71,11 @@ export default {
     },
     async saveLayout() {
       try {
-        await this.$http.user.editLayout(this.layout)
+        await this.$store.dispatch('settings/editLayout', this.layout)
 
         this.editable = false
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     async fetchGroups() {
@@ -98,7 +99,8 @@ export default {
 .vue-grid-layout {
   max-height: 100vh;
   min-height: 100vh;
-  width: 100%;
+  width: 99%;
+  margin: 0 auto;
 }
 .vue-grid-item {
   overflow-y: auto;
@@ -118,5 +120,8 @@ export default {
   &--green {
     background-color: lightgreen;
   }
+}
+.bordered {
+  border: 1px dashed #000;
 }
 </style>

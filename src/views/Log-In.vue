@@ -28,7 +28,7 @@ export default {
 
         this.$router.push({ name: 'Home' })
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     }
   }
@@ -37,7 +37,8 @@ export default {
 
 <style lang="scss" scoped>
 form {
-  input, button {
+  input,
+  button {
     width: 300px;
   }
   button {

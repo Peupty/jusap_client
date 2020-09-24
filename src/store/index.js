@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import user from './user/index'
 import settings from './settings/index'
 import chats from './chats/index'
+import alert from './alert/index'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   modules: {
     user,
     settings,
-    chats
+    chats,
+    alert
   }
 })

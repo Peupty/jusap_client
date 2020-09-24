@@ -3,11 +3,11 @@
     <h3>add user</h3>
     <ul class="col">
       <li
-        v-for="(user, index) in users"
-        :key="user.id"
-        @click.prevent="addParticipant(user, index)"
+        v-for="(user, id) in users"
+        :key="id"
+        @click.prevent="addParticipant(id)"
       >
-        {{ user.nickname }}
+        {{ user + id }}
       </li>
     </ul>
   </form>
@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      users: []
+      users: {}
     }
   },
   created() {
@@ -32,23 +32,28 @@ export default {
         const { data } = await this.$http.group.getParticipants(
           this.modalProps.groupId
         )
-        this.users = data.filter(
-          user => !this.modalProps.userList.find(el => el.id === user.id)
-        )
+        this.users = data.reduce((acc, user) => {
+          // eslint-disable-next-line
+          if (!this.modalProps.userList.hasOwnProperty(user.id))
+            acc[user.id] = user.nickname
+          return acc
+        }, {})
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
-    async addParticipant(id, index) {
+    async addParticipant(id) {
       try {
-        await this.$http.chat.addParticipant({
-          participantId: id,
+        const data = {
+          participantId: parseInt(id),
           conversationId: this.modalProps.id
-        })
+        }
+        await this.$http.chat.addParticipant(data)
 
-        this.users.splice(index, 1)
+        delete this.users[id]
+        this.users = JSON.parse(JSON.stringify(this.users))
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     }
   }

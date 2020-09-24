@@ -21,6 +21,10 @@ const mutations = {
     const index = state.layouts.findIndex(el => el.name === name)
 
     if (index >= 0) state.layouts.splice(index, 1)
+  },
+  REMOVE_GROUP_FROM_LAYOUT(state, { id, index }) {
+    const idx = state.layouts[index].groups.findIndex(el => el.i === id)
+    if (idx >= 0) state.layouts[index].groups.splice(idx, 1)
   }
 }
 
@@ -40,6 +44,25 @@ const actions = http => ({
       await http.user.deleteLayout(name)
 
       commit('DELETE_LAYOUT', name)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async editLayout({ commit }, layout) {
+    try {
+      await http.user.editLayout(layout)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async removeGroupFromLayouts({ state, commit, dispatch }, id) {
+    try {
+      const allLayouts = state.layouts.map((layout, index) => {
+        layout.groups.findIndex(el => el.i === id)
+        commit('REMOVE_GROUP_FROM_LAYOUT', { id, index })
+        return dispatch('editLayout', layout)
+      })
+      await Promise.all(allLayouts)
     } catch (error) {
       console.log(error)
     }

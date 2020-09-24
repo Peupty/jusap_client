@@ -45,7 +45,7 @@ export default {
 
         this.results = data.content
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     }, 1000),
     async joinGroup(group) {
@@ -57,7 +57,7 @@ export default {
         this.inviteCode = group.inviteCode
         this.step++
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     async submitForm() {
@@ -69,7 +69,7 @@ export default {
 
         this.$eventBus.$emit('close-modal')
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     }
   }

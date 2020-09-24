@@ -21,6 +21,10 @@ const mutations = {
   },
   REFRESH_GROUP(state, { id, data }) {
     state.groups.find(el => el.group.id === id).posts = data
+  },
+  REMOVE_GROUP(state, id) {
+    const index = state.groups.findIndex(el => el.group.id === id)
+    if (index >= 0) state.groups.splice(index, 1)
   }
 }
 
@@ -95,6 +99,13 @@ const actions = http => ({
     } catch (error) {
       console.log(error)
     }
+  },
+  async leaveGroup({ commit, dispatch }, id) {
+    try {
+      await http.group.leave(id)
+      await dispatch('settings/removeGroupFromLayouts', id, { root: true })
+      commit('REMOVE_GROUP', id)
+    } catch (error) {}
   }
 })
 

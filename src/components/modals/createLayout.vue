@@ -50,7 +50,7 @@ export default {
 
         this.$eventBus.$emit('close-modal')
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     }
   }

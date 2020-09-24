@@ -55,7 +55,7 @@ export default {
         this.users = data
         this.open = true
       } catch (error) {
-        console.log(error)
+        this.$alert.display(error)
       }
     },
     openConversation(id) {

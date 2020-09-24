@@ -12,7 +12,7 @@
       </div>
       <button @click="logOut" v-if="loggedIn">log out</button>
     </div>
-    <router-view />
+    <router-view class="main" />
     <div class="modal col" v-if="modalOpen">
       <button @click="closeModal" class="modal__close">X</button>
       <component
@@ -21,11 +21,21 @@
         class="modal__window"
       ></component>
     </div>
+    <div class="alerts">
+      <div
+        v-for="(alert, index) in alerts"
+        :key="index"
+        :class="['alerts__item', `alerts__item--${alert.type}`]"
+      >
+        {{ alert.text }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { protectedRoutes } from '@/router/index'
+import { mapState } from 'vuex'
 
 export default {
   data: () => ({
@@ -34,6 +44,9 @@ export default {
     modalProps: {}
   }),
   computed: {
+    ...mapState({
+      alerts: state => state.alert.alerts
+    }),
     routes() {
       return this.loggedIn ? protectedRoutes : []
     },
@@ -63,6 +76,10 @@ export default {
       try {
         await this.$http.user.logOut()
 
+        await this.$alert.display({
+          type: 'success',
+          text: 'logged out successfuly'
+        })
         location.reload()
       } catch (error) {}
     }
@@ -146,6 +163,32 @@ button {
 
   ul {
     list-style-type: none;
+  }
+}
+.alerts {
+  position: fixed;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  margin: 0 20px 20px 0;
+  width: 280px;
+
+  &__item {
+    min-height: 120px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &--error {
+      background: crimson;
+    }
+    &--success {
+      background: lightgreen;
+    }
+    &--info {
+      background: skyblue;
+    }
   }
 }
 </style>

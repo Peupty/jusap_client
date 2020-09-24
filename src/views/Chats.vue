@@ -42,15 +42,11 @@ export default {
     ChatUsers,
     ExistingConversation
   },
-  data() {
-    return {
-      existingConversations: []
-    }
-  },
   computed: {
     ...mapState({
       groups: state => state.user.groups,
-      conversations: state => state.chats.conversations
+      conversations: state => state.chats.conversations,
+      existingConversations: state => state.chats.existingConversations
     })
   },
   async created() {
@@ -60,14 +56,8 @@ export default {
     openChatSearch() {
       this.openModal('chatSelect')
     },
-    async getExistingConversations() {
-      try {
-        const { data } = await this.$http.chat.getExistingConversations()
-
-        this.existingConversations = data
-      } catch (error) {
-        console.log(error)
-      }
+    getExistingConversations() {
+      this.$store.dispatch('chats/getExistingConversations')
     }
   }
 }
