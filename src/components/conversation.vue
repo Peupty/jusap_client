@@ -1,17 +1,23 @@
 <template>
-  <div class="conversation col">
-    <div class="conversation__toolbar row">
+  <div class="conversation">
+    <div class="conversation__toolbar">
       <p>
         {{ conversation.id }}
       </p>
-      <div class="row">
-        <button @click="openConversationSettings">+</button>
-        <button class="closeButton" @click="closeConversation(conversation.id)">
-          X
-        </button>
-      </div>
+      <b-button-group class="mb-2">
+        <b-button @click="openConversationSettings" variant="success"
+          ><b-icon-plus></b-icon-plus
+        ></b-button>
+        <b-button
+          variant="danger"
+          class="closeButton"
+          @click="closeConversation(conversation.id)"
+        >
+          <b-icon-x></b-icon-x>
+        </b-button>
+      </b-button-group>
     </div>
-    <div class="conversation__content col" v-chat-scroll>
+    <div class="conversation__content" v-chat-scroll>
       <div
         v-for="(msg, index) in conversation.content"
         :class="[
@@ -20,13 +26,17 @@
         ]"
         :key="index"
       >
-        <h4>{{ conversation.userList[msg.participantId] }}</h4>
+        <h5>{{ conversation.userList[msg.participantId] }}</h5>
         <p>{{ msg.content }}</p>
       </div>
     </div>
-    <form class="row" @submit.prevent="sendMessage">
-      <input type="text" v-model="message" required />
-      <button type="submit">SEND</button>
+    <form class="" @submit.prevent="sendMessage">
+      <b-input-group class="mt-2">
+        <b-input type="text" v-model="message" required />
+        <b-input-group-append>
+          <b-button type="submit" variant="primary">SEND</b-button>
+        </b-input-group-append>
+      </b-input-group>
     </form>
   </div>
 </template>
@@ -75,16 +85,22 @@ export default {
 
 <style lang="scss" scoped>
 .conversation {
+  display: flex;
   width: 100%;
   height: 100%;
-  max-height: 280px;
+  max-height: 320px;
+  flex-direction: column;
   justify-content: space-between;
+  margin: 0;
 
   &__toolbar {
+    display: flex;
     justify-content: space-between;
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
     background: #b3b3b3;
@@ -93,6 +109,8 @@ export default {
 }
 .message {
   background: #d6d6d6;
+  display: flex;
+  flex-direction: column;
   width: 70%;
   align-self: flex-start;
   margin-bottom: 5px;

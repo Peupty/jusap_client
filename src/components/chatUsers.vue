@@ -1,15 +1,16 @@
 <template>
   <div class="group">
-    <h4 @click="toggle" class="group__name">{{ chat.name }}</h4>
-    <ul class="users col" v-if="open && otherUsers.length">
-      <li
+    <h5 @click="toggle" class="group__name">{{ chat.name }}</h5>
+    <b-list-group class="users col" v-if="open && otherUsers.length">
+      <b-list-group-item
+        class="list-item"
         v-for="user in otherUsers"
         :key="user.id"
         @click="openConversation(user.id)"
       >
-        <p>{{ user.nickname }}</p>
-      </li>
-    </ul>
+        {{ user.nickname }}
+      </b-list-group-item>
+    </b-list-group>
     <div v-if="open && !otherUsers.length">
       <p>No users in group</p>
     </div>
@@ -90,7 +91,7 @@ export default {
   margin-left: 10px;
   list-style-type: none;
 
-  li:hover {
+  .list-item:hover {
     cursor: pointer;
     background: skyblue;
   }

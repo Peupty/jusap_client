@@ -1,22 +1,29 @@
 <template>
   <div class="home col">
-    <div class="toolbar row">
-      <button @click="addGroup">Add group</button>
-      <button @click="!editable ? (editable = true) : saveLayout()">
-        {{ editable ? 'save' : 'edit layout' }}
-      </button>
-      <button @click="createLayout">Create Layout</button>
-    </div>
-    <div>
-      <button
-        v-for="(item, index) in layouts"
-        @click="selectLayout(index)"
-        :key="index"
-        :disabled="editable || item === layout"
-        :class="{ 'button--green': item === layout }"
-      >
-        {{ item.name }}
-      </button>
+    <div class="toolbar">
+      <b-button-group class="row">
+        <b-button @click="addGroup" variant="primary">Add group</b-button>
+        <b-button
+          @click="!editable ? (editable = true) : saveLayout()"
+          :variant="!editable ? 'primary' : 'warning'"
+        >
+          {{ editable ? 'Save' : 'Edit layout' }}
+        </b-button>
+        <b-button @click="createLayout" variant="primary"
+          >Create layout</b-button
+        >
+      </b-button-group>
+      <b-button-group class="mt-2">
+        <b-button
+          v-for="(item, index) in layouts"
+          @click="selectLayout(index)"
+          :key="index"
+          :disabled="editable || item === layout"
+          :variant="item === layout ? 'success' : 'secondary'"
+        >
+          {{ item.name }}
+        </b-button>
+      </b-button-group>
     </div>
     <main v-if="layout && layout.groups.length">
       <grid-layout
@@ -57,10 +64,13 @@ export default {
   }),
   computed: {
     ...mapState({
-      layout: state => state.settings.activeLayout,
+      // layout: state => state.settings.activeLayout,
       layouts: state => state.settings.layouts,
       userId: state => state.user.id
-    })
+    }),
+    layout() {
+      return this.$store.getters['settings/getActiveLayout']
+    }
   },
   created() {
     this.fetchGroups()
@@ -82,7 +92,9 @@ export default {
       if (this.$store.state.user.loggedIn) {
         await this.$store.dispatch('user/fetchGroups')
 
-        this.$store.commit('settings/SET_ACTIVE_LAYOUT')
+        if (this.$store.state.settings.activeLayout === null) {
+          this.$store.commit('settings/SET_ACTIVE_LAYOUT')
+        }
       }
     },
     createLayout() {
@@ -99,7 +111,7 @@ export default {
 .vue-grid-layout {
   max-height: 100vh;
   min-height: 100vh;
-  width: 99%;
+  width: 100%;
   margin: 0 auto;
 }
 .vue-grid-item {
@@ -114,7 +126,14 @@ export default {
   height: 100vh;
 }
 .toolbar {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  button {
+    width: 150px;
+  }
 }
 .button {
   &--green {

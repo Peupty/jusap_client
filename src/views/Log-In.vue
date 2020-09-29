@@ -1,14 +1,28 @@
 <template>
-  <form @submit.prevent="submitForm" name="sign in" class="col">
-    <section class="col">
-      <label for="">Email:</label>
-      <input type="email" name="" v-model="email" ref="email" v-autofocus />
-    </section>
-    <section class="col">
-      <label for="">Password:</label>
-      <input type="password" name="" v-model="password" ref="password" />
-    </section>
-    <button type="submit" ref="submit">Sign In</button>
+  <form @submit.prevent="submitForm" name="sign in" class="col mx-auto">
+    <b-form-group>
+      <label for="email">Email:</label>
+      <b-input
+        type="email"
+        class="input-field"
+        v-model="email"
+        ref="email"
+        name="email"
+        v-autofocus
+      />
+    </b-form-group>
+    <b-form-group >
+      <label for="password">Password:</label>
+      <b-input
+        type="password"
+        name="password"
+        v-model="password"
+        ref="password"
+      />
+    </b-form-group>
+    <b-button type="submit" ref="submit" variant="primary">
+      Sign In
+    </b-button>
   </form>
 </template>
 
@@ -37,15 +51,9 @@ export default {
 
 <style lang="scss" scoped>
 form {
-  input,
-  button {
-    width: 300px;
-  }
-  button {
-    margin-top: 15px;
-  }
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-width: 300px;
+  justify-self: center;
+  // align-items: center;
+  // justify-content: center;
 }
 </style>

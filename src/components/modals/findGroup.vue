@@ -1,29 +1,43 @@
 <template>
   <form class="findGroup col" v-if="step === 0">
-    <section class="col">
-      <label for="">explore groups:</label>
-      <input type="text" v-model="search" @input="fetchGroups" v-autofocus />
-    </section>
-    <ul class="groups col">
-      <li v-for="(item, index) in results" :key="index" class="groups__item">
+    <div class="col">
+      <label for="find-group">Find Group:</label>
+      <b-input
+        type="text"
+        name="find-group"
+        v-model="search"
+        @input="fetchGroups"
+        v-autofocus
+      />
+    </div>
+    <ul class="groups mt-4">
+      <li
+        v-for="(item, index) in results"
+        :key="index"
+        class="groups__item mt-2"
+      >
         <p>
           <strong>
             {{ item.name }}
           </strong>
           | {{ item.category }} | {{ item.participantCount }}
         </p>
-        <button :disabled="item.member" @click.prevent="joinGroup(item)">
-          join
-        </button>
+        <b-button
+          :variant="item.member ? 'secondary' : 'primary'"
+          :disabled="item.member"
+          @click.prevent="joinGroup(item)"
+        >
+          Join
+        </b-button>
       </li>
     </ul>
   </form>
   <form class="col" v-else @submit.prevent="submitForm">
-    <div class="col" v-for="(item, key) in form" :key="key">
+    <b-form-group v-for="(item, key) in form" :key="key">
       <label>{{ key }}</label>
-      <input type="text" v-model="form[key]" />
-    </div>
-    <button type="submit">join</button>
+      <b-input type="text" v-model="form[key]" required />
+    </b-form-group>
+    <b-button type="submit" variant="primary">Join</b-button>
   </form>
 </template>
 
@@ -31,6 +45,7 @@
 import { debounce } from 'lodash'
 
 export default {
+  name: 'Find-Group',
   data: () => ({
     search: '',
     results: [],

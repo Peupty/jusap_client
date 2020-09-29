@@ -3,7 +3,7 @@ import http from '@/services/http/index'
 import { setState } from '../utils'
 
 const state = {
-  activeLayout: { name: '', groups: [] },
+  activeLayout: null,
   layouts: []
 }
 
@@ -15,7 +15,7 @@ const mutations = {
     state.layouts.push(layout)
   },
   SET_ACTIVE_LAYOUT(state, index = 0) {
-    state.activeLayout = state.layouts[index]
+    state.activeLayout = index
   },
   DELETE_LAYOUT(state, name) {
     const index = state.layouts.findIndex(el => el.name === name)
@@ -69,9 +69,17 @@ const actions = http => ({
   }
 })
 
+const getters = {
+  getActiveLayout: state =>
+    state.layouts.length && state.activeLayout !== null
+      ? state.layouts[state.activeLayout]
+      : { name: '', groups: [] }
+}
+
 export default {
   state,
   mutations,
   actions: actions(http),
+  getters,
   namespaced: true
 }

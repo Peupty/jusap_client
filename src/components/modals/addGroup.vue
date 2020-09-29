@@ -1,12 +1,13 @@
 <template>
-  <div class="row">
-    <button @click="createGroup">create group</button>
-    <button @click="findGroup">find group</button>
+  <div class="mx-auto">
+    <b-button @click="createGroup" >Create</b-button>
+    <b-button @click="findGroup" class="mx-2">Find</b-button>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'Add-Group',
   methods: {
     createGroup() {
       this.openModal('createGroup')

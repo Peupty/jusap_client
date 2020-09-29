@@ -1,8 +1,7 @@
 <template>
   <div class="post col">
-    <h4>{{ post.author.nickname }}</h4>
-    <p>{{ post.content }}</p>
-    <button class="post__react" @click="react(post.id)">react</button>
+    <h5 class="text-left">{{ post.author.nickname }}</h5>
+    <p class="text-left">{{ post.content }}</p>
   </div>
 </template>
 

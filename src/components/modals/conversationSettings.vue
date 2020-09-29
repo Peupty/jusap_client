@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: 'Conversation-Settings',
   props: {
     modalProps: Object
   },

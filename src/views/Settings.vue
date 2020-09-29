@@ -1,27 +1,29 @@
 <template>
   <section class="col">
-    <h2>user settings</h2>
-    <div class="row">
-      <ul class="col">
-        <li>
-          <h3>layouts:</h3>
-        </li>
+    <h4>User settings</h4>
+    <div class="d-flex">
+      <b-list-group class="list">
+        <h5>Layouts:</h5>
         <li class="row" v-for="layout in layouts" :key="layout.name">
           <p>{{ layout.name }}</p>
-          <button @click.prevent="deleteLayout(layout.name)">X</button>
+          <b-button class="d-flex" @click.prevent="deleteLayout(layout.name)">
+            <b-icon-x class="m-auto"></b-icon-x>
+          </b-button>
         </li>
-      </ul>
-      <ul class="col">
-        <li>
-          <h3>groups:</h3>
-        </li>
+      </b-list-group>
+      <b-list-group class="list">
+        <h5>Groups:</h5>
         <li class="row" v-for="group in groups" :key="group.group.id">
           <p>{{ group.group.name }}</p>
-          <button title="leave group" @click="leaveGroup(group.group.id)">
-            X
-          </button>
+          <b-button
+            title="leave group"
+            class="d-flex"
+            @click="leaveGroup(group.group.id)"
+          >
+            <b-icon-x class="m-auto"></b-icon-x>
+          </b-button>
         </li>
-      </ul>
+      </b-list-group>
     </div>
   </section>
 </template>
@@ -51,7 +53,6 @@ export default {
 section {
   text-align: start;
   align-items: start;
-  margin: 0 10px;
 }
 button {
   padding: 0 10px;
@@ -62,8 +63,11 @@ li {
   margin-top: 5px;
   justify-content: space-between;
 }
-ul {
-  list-style-type: none;
-  margin-left: 10px;
+.list {
+  width: 300px;
+  margin-left: 15px;
+}
+p {
+  margin: 0;
 }
 </style>

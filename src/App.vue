@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav" class="row">
+    <div id="nav">
       <div class="row">
         <router-link
           v-for="(route, index) in routes"
@@ -10,17 +10,16 @@
           {{ route.name }}
         </router-link>
       </div>
-      <button @click="logOut" v-if="loggedIn">log out</button>
+      <b-button @click="logOut" v-if="loggedIn">Log out</b-button>
     </div>
-    <router-view class="main" />
-    <div class="modal col" v-if="modalOpen">
-      <button @click="closeModal" class="modal__close">X</button>
-      <component
-        :is="modal"
-        :modalProps="modalProps"
-        class="modal__window"
-      ></component>
-    </div>
+    <router-view />
+    <b-modal id="modal" scrollable>
+      <template v-slot:modal-title>{{
+        modalTitle.split('-').join(' ')
+      }}</template>
+      <template v-slot:modal-footer><div></div></template>
+      <component :is="modal" :modalProps="modalProps"></component>
+    </b-modal>
     <div class="alerts">
       <div
         v-for="(alert, index) in alerts"
@@ -40,8 +39,8 @@ import { mapState } from 'vuex'
 export default {
   data: () => ({
     modal: null,
-    modalOpen: false,
-    modalProps: {}
+    modalProps: {},
+    modalTitle: ''
   }),
   computed: {
     ...mapState({
@@ -64,13 +63,14 @@ export default {
   },
   methods: {
     openModalWindow({ component, props }) {
+      component().then(a => (this.modalTitle = a.default.name))
       this.modalProps = props
       this.modal = component
-      this.modalOpen = true
+      this.$bvModal.show('modal')
     },
     closeModal() {
+      this.$bvModal.hide('modal')
       this.modal = null
-      this.modalOpen = false
     },
     async logOut() {
       try {
@@ -103,6 +103,7 @@ export default {
 }
 
 #nav {
+  display: flex;
   padding: 30px;
   justify-content: space-between;
 
@@ -116,19 +117,19 @@ export default {
     }
   }
 }
-.col {
-  display: flex;
-  flex-direction: column;
-}
-.row {
-  display: flex;
-  flex-direction: row;
-}
-button {
-  margin: 0 2px;
-  padding: 0 10px;
-}
-.modal {
+// .col {
+//   display: flex;
+//   flex-direction: column;
+// }
+// .row {
+//   display: flex;
+//   flex-direction: row;
+// }
+// button {
+//   margin: 0 2px;
+//   padding: 0 10px;
+// }
+.modalx {
   position: fixed;
   top: 50%;
   left: 50%;

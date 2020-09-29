@@ -11,8 +11,11 @@
   "dependencies": {
     "@stomp/stompjs": "^5.4.4",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.2",
+    "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
     "lodash": "^4.17.19",
+    "materialize-css": "^1.0.0-rc.2",
     "sockjs": "^0.3.20",
     "sockjs-client": "^1.5.0",
     "vue": "^2.6.11",

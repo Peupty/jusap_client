@@ -1,10 +1,10 @@
 <template>
-  <main class="row">
+  <main class="">
     <!-- <button @click="openChatSearch">open chat</button> -->
-    <div class="sidebar col">
-      <h3 class="title">
-        new conversation
-      </h3>
+    <div class="sidebar">
+      <h4 class="title">
+        New conversation
+      </h4>
       <ChatUsers
         v-for="chat in groups"
         :key="chat.group.id"
@@ -19,8 +19,8 @@
         :conversation="item"
       ></app-conversation>
     </div>
-    <div class="sidebar col">
-      <h3 class="title">existing conversations</h3>
+    <div class="sidebar">
+      <h4 class="title">Existing conversations</h4>
       <ExistingConversation
         v-for="conversation in existingConversations"
         :key="conversation.id"
@@ -65,16 +65,19 @@ export default {
 
 <style lang="scss" scoped>
 main {
+  display: flex;
   margin: 0 10px;
 }
 .sidebar {
+  display: flex;
+  flex-direction: column;
   width: 15%;
 }
 .chats {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 280px;
+  grid-auto-rows: 320px;
   gap: 20px;
   justify-content: space-around;
   margin: 0 10px;

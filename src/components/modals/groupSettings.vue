@@ -1,11 +1,11 @@
 <template>
   <form class="groupSettings col" @submit.prevent="save">
-    <h2>{{ data.name }} settings</h2>
+    <h3>{{ data.name }}</h3>
     <GroupJoinRequests
       :requests="requests"
       @user-accept="onUserAccept"
     ></GroupJoinRequests>
-    <button type="submit" class="save">save</button>
+    <b-button type="submit" variant="primary" class="save">Save</b-button>
   </form>
 </template>
 
@@ -14,6 +14,7 @@ import GroupJoinRequests from '@/components/groupJoinRequests.vue'
 import createNewGroup from '@/utils/createNewGroup'
 
 export default {
+  name: 'Group-Settings',
   components: {
     GroupJoinRequests
   },

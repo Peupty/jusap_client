@@ -1,28 +1,28 @@
 <template>
   <div class="col">
     <div class="row">
-      <h4>Join requests: {{ requests.length }}</h4>
-      <button @click.prevent="open = !open">
-        {{ open ? 'hide' : 'open' }}
-      </button>
+      <h5>Join requests: {{ requests.length }}</h5>
+      <b-button @click.prevent="open = !open" class="ml-auto">
+        {{ open ? 'Hide' : 'Open' }}
+      </b-button>
     </div>
     <div v-if="open && !requests.length">
       No join requests
     </div>
     <div class="col" v-if="open && requests.length">
-      <ul class="col requestList">
-        <li
+      <b-list-group class="col requestList">
+        <b-list-group-item
           v-for="(request, index) in requests"
           :key="index"
           class="col requestList__item"
         >
           <h4>nickname: {{ request.nickname }}</h4>
-          <ul
-            class="col"
+          <b-list-group
+            tag="ul"
             v-for="(answer, question) in requestForm(request)"
             :key="question"
           >
-            <li class="col">
+            <b-list-group-item class="col">
               <p>
                 <strong>
                   {{ question }}
@@ -31,16 +31,18 @@
               <p>
                 {{ answer }}
               </p>
-            </li>
-          </ul>
-          <button
+            </b-list-group-item>
+          </b-list-group>
+          <b-button
+            variant="success"
+            class="mt-2"
             @click.prevent="acceptUser(request.nickname)"
             :disabled="users.includes(request.nickname)"
           >
-            accept
-          </button>
-        </li>
-      </ul>
+            Accept
+          </b-button>
+        </b-list-group-item>
+      </b-list-group>
     </div>
   </div>
 </template>
