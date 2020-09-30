@@ -20,7 +20,10 @@
           <strong>
             {{ item.name }}
           </strong>
-          | {{ item.category }} | {{ item.participantCount }}
+          | {{ item.category }} |
+          <b-badge>
+            Members: {{ item.participantCount }}
+          </b-badge>
         </p>
         <b-button
           :variant="item.member ? 'secondary' : 'primary'"

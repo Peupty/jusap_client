@@ -1,15 +1,16 @@
 <template>
   <form>
-    <h3>add user</h3>
-    <ul class="col">
-      <li
+    <h5>Add user</h5>
+    <b-list-group class="col">
+      <b-list-group-item
+        :button="true"
         v-for="(user, id) in users"
         :key="id"
         @click.prevent="addParticipant(id)"
       >
         {{ user + id }}
-      </li>
-    </ul>
+      </b-list-group-item>
+    </b-list-group>
   </form>
 </template>
 

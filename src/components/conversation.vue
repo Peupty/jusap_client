@@ -2,7 +2,7 @@
   <div class="conversation">
     <div class="conversation__toolbar">
       <p>
-        {{ conversation.id }}
+        {{ conversation.name }}
       </p>
       <b-button-group class="mb-2">
         <b-button @click="openConversationSettings" variant="success"
@@ -18,8 +18,10 @@
       </b-button-group>
     </div>
     <div class="conversation__content" v-chat-scroll>
-      <div
+      <b-alert
         v-for="(msg, index) in conversation.content"
+        :variant="msg.participantId === conversation.user ? 'success' : 'info'"
+        show
         :class="[
           'message',
           { message__own: msg.participantId === conversation.user }
@@ -28,7 +30,7 @@
       >
         <h5>{{ conversation.userList[msg.participantId] }}</h5>
         <p>{{ msg.content }}</p>
-      </div>
+      </b-alert>
     </div>
     <form class="" @submit.prevent="sendMessage">
       <b-input-group class="mt-2">
@@ -43,6 +45,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import chatUserNames from '@/utils/chatUserNames'
 
 export default {
   props: ['conversation'],
@@ -57,6 +60,7 @@ export default {
     })
   },
   methods: {
+    chatUserNames,
     closeConversation(id) {
       this.$store.commit('chats/CLOSE_CONVERSATION', id)
     },
@@ -108,7 +112,7 @@ export default {
   }
 }
 .message {
-  background: #d6d6d6;
+  // background: #d6d6d6;
   display: flex;
   flex-direction: column;
   width: 70%;
@@ -119,7 +123,7 @@ export default {
   &__own {
     align-self: flex-end;
     text-align: right;
-    background: green;
+    // background: green;
   }
 }
 .closeButton {

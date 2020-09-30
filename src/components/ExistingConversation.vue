@@ -1,10 +1,14 @@
 <template>
   <div class="group" @click="openConversation(data.id)">
-    {{ data.name || displayedNames }}
+    {{
+      data.name || chatUserNames(this.data.participants.map(el => el.nickname))
+    }}
   </div>
 </template>
 
 <script>
+import chatUserNames from '@/utils/chatUserNames'
+
 export default {
   props: {
     data: Object
@@ -14,16 +18,11 @@ export default {
       users: []
     }
   },
-  computed: {
-    displayedNames() {
-      const str = this.data.participants.map(el => el.nickname).join(', ')
-
-      return str.length > 20 ? str.slice(0, 20) + '...' : str
-    }
-  },
   methods: {
+    chatUserNames,
     async openConversation(id) {
       const { data } = await this.$http.chat.getConversationMessages(id)
+      data.name = this.data.name
 
       this.$store.commit('chats/CREATE_CONVERSATION', data)
     }

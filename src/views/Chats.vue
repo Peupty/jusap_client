@@ -21,11 +21,15 @@
     </div>
     <div class="sidebar">
       <h4 class="title">Existing conversations</h4>
-      <ExistingConversation
-        v-for="conversation in existingConversations"
-        :key="conversation.id"
-        :data="conversation"
-      ></ExistingConversation>
+      <b-list-group>
+        <b-list-group-item>
+          <ExistingConversation
+            v-for="conversation in existingConversations"
+            :key="conversation.id"
+            :data="conversation"
+          ></ExistingConversation>
+        </b-list-group-item>
+      </b-list-group>
     </div>
   </main>
 </template>

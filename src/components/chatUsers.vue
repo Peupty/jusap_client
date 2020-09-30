@@ -1,7 +1,7 @@
 <template>
   <div class="group">
-    <h5 @click="toggle" class="group__name">{{ chat.name }}</h5>
-    <b-list-group class="users col" v-if="open && otherUsers.length">
+    <b-button block @click="toggle" variant="info" class="mt-2">{{ chat.name }}</b-button>
+    <b-list-group class="users mt-2" v-if="open && otherUsers.length">
       <b-list-group-item
         class="list-item"
         v-for="user in otherUsers"
