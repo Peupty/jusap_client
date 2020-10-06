@@ -13,8 +13,15 @@
       </b-list-group>
       <b-list-group class="list">
         <h5>Groups:</h5>
-        <li class="row" v-for="group in groups" :key="group.group.id">
-          <p>{{ group.group.name }}</p>
+        <li
+          class="d-flex align-items-center"
+          v-for="group in groups"
+          :key="group.group.id"
+        >
+          <div class="d-flex align-items-center">
+            <b-avatar size="20" class="mr-2"></b-avatar>
+            <p class="my-auto">{{ group.group.name }}</p>
+          </div>
           <b-button
             title="leave group"
             class="d-flex"

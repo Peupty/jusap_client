@@ -1,12 +1,15 @@
 <template>
   <div class="conversation">
-    <div class="conversation__toolbar">
-      <p>
-        {{ conversation.name }}
-      </p>
+    <div class="conversation__toolbar mb-1">
+      <div class="d-flex align-items-center">
+        <b-avatar class="mr-2"></b-avatar>
+        <p class="my-auto">
+          {{ conversation.name }}
+        </p>
+      </div>
       <b-button-group class="mb-2">
         <b-button @click="openConversationSettings" variant="success"
-          ><b-icon-plus></b-icon-plus
+          ><b-icon-gear-wide></b-icon-gear-wide
         ></b-button>
         <b-button
           variant="danger"
@@ -28,11 +31,14 @@
         ]"
         :key="index"
       >
-        <h5>{{ conversation.userList[msg.participantId] }}</h5>
+        <div class="d-flex flex-row align-items-center">
+          <b-avatar class="mr-2" size="30"></b-avatar>
+          <h5>{{ conversation.userList[msg.participantId] }}</h5>
+        </div>
         <p>{{ msg.content }}</p>
       </b-alert>
     </div>
-    <form class="" @submit.prevent="sendMessage">
+    <form @submit.prevent="sendMessage">
       <b-input-group class="mt-2">
         <b-input type="text" v-model="message" required />
         <b-input-group-append>

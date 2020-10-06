@@ -17,8 +17,11 @@ const addParticipant = http => data =>
     data
   })
 
+const removeParticipant = http => data => Promise.resolve()
+
 export default http => ({
   getExistingConversations: getExistingConversations(http),
   getConversationMessages: getConversationMessages(http),
-  addParticipant: addParticipant(http)
+  addParticipant: addParticipant(http),
+  removeParticipant: removeParticipant(http)
 })

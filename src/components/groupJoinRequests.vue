@@ -10,19 +10,22 @@
       No join requests
     </div>
     <div class="col" v-if="open && requests.length">
-      <b-list-group class="col requestList">
+      <b-list-group class="requestList">
         <b-list-group-item
           v-for="(request, index) in requests"
           :key="index"
-          class="col requestList__item"
+          class="requestList__item"
         >
-          <h4>nickname: {{ request.nickname }}</h4>
+          <h5>nickname: {{ request.nickname }}</h5>
+          <div class="d-flex align-items-center mb-2">
+            <h5 class="my-auto">avatar:</h5>
+            <b-avatar class="ml-2"></b-avatar>
+          </div>
           <b-list-group
-            tag="ul"
             v-for="(answer, question) in requestForm(request)"
             :key="question"
           >
-            <b-list-group-item class="col">
+            <b-list-group-item class="">
               <p>
                 <strong>
                   {{ question }}
@@ -33,14 +36,18 @@
               </p>
             </b-list-group-item>
           </b-list-group>
-          <b-button
-            variant="success"
-            class="mt-2"
-            @click.prevent="acceptUser(request.nickname)"
-            :disabled="users.includes(request.nickname)"
-          >
-            Accept
-          </b-button>
+          <b-button-group class="mt-2">
+            <b-button
+              variant="success"
+              @click.prevent="accept(request)"
+              :disabled="users.includes(request.nickname)"
+            >
+              Accept
+            </b-button>
+            <b-button variant="danger" @click.prevent="decline(request)"
+              >Decline</b-button
+            >
+          </b-button-group>
         </b-list-group-item>
       </b-list-group>
     </div>
@@ -50,7 +57,8 @@
 <script>
 export default {
   props: {
-    requests: Array
+    requests: Array,
+    id: [Number, String]
   },
   data() {
     return {
@@ -62,9 +70,23 @@ export default {
     requestForm(request) {
       return request.form.form
     },
-    acceptUser(nickname) {
-      this.users.push(nickname)
-      this.$emit('user-accept', this.users)
+    async accept(request) {
+      try {
+        await this.$http.group.acceptRequest(this.id, [request.nickname])
+
+        this.$emit('remove-user', request)
+      } catch (error) {
+        this.$alert.display(error)
+      }
+    },
+    async decline(request) {
+      try {
+        await this.$http.group.declineRequest(this.id, [request.nickname])
+
+        this.$emit('remove-user', request)
+      } catch (error) {
+        this.$alert.display(error)
+      }
     }
   }
 }

@@ -1,6 +1,16 @@
 <template>
   <div class="group">
-    <b-button block @click="toggle" variant="info" class="mt-2">{{ chat.name }}</b-button>
+    <b-button
+      block
+      @click="toggle"
+      variant="info"
+      class="d-flex align-items-center mt-2"
+    >
+      <b-avatar size="20" class="mr-2"></b-avatar>
+      <p class="my-auto">
+        {{ truncate(chat.name, 15) }}
+      </p>
+    </b-button>
     <b-list-group class="users mt-2" v-if="open && otherUsers.length">
       <b-list-group-item
         class="list-item"
@@ -8,7 +18,12 @@
         :key="user.id"
         @click="openConversation(user.id)"
       >
-        {{ user.nickname }}
+        <div class="d-flex flex-row align-items-center">
+          <b-avatar class="mr-2" size="30"></b-avatar>
+          <p class="my-auto">
+            {{ user.nickname }}
+          </p>
+        </div>
       </b-list-group-item>
     </b-list-group>
     <div v-if="open && !otherUsers.length">
@@ -18,6 +33,8 @@
 </template>
 
 <script>
+import truncate from '@/utils/truncate'
+
 export default {
   props: {
     chat: {
@@ -41,6 +58,7 @@ export default {
     }
   },
   methods: {
+    truncate,
     async toggle() {
       if (this.open) {
         this.open = false

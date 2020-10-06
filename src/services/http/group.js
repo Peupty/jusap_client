@@ -55,10 +55,17 @@ const getJoinRequests = http => id =>
     url: `/api/group/${id}/forms`
   })
 
-const acceptRequests = http => (id, users) =>
+const acceptRequest = http => (id, users) =>
   http({
     method: 'post',
     url: `/api/group/${id}/forms`,
+    data: users
+  })
+
+const declineRequest = http => (id, users) =>
+  http({
+    method: 'post',
+    url: `/api/group/${id}/forms/decline`,
     data: users
   })
 
@@ -78,6 +85,7 @@ export default http => ({
   submitJoinForm: submitJoinForm(http),
   getParticipants: getParticipants(http),
   getJoinRequests: getJoinRequests(http),
-  acceptRequests: acceptRequests(http),
+  acceptRequest: acceptRequest(http),
+  declineRequest: declineRequest(http),
   leave: leave(http)
 })

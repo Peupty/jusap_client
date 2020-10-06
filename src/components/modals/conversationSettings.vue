@@ -1,14 +1,25 @@
 <template>
   <form>
-    <h5>Add user</h5>
-    <b-list-group class="col">
+    <h5>Manage users</h5>
+    <b-list-group>
       <b-list-group-item
+        class="d-flex align-items-center"
         :button="true"
-        v-for="(user, id) in users"
-        :key="id"
-        @click.prevent="addParticipant(id)"
+        v-for="(user) in users"
+        :variant="
+          modalProps.userList.hasOwnProperty(user.id) ? 'success' : ''
+        "
+        :key="user.id"
+        @click.prevent="
+          modalProps.userList.hasOwnProperty(user.id)
+            ? removeParticipant(user.id)
+            : addParticipant(user.id)
+        "
       >
-        {{ user + id }}
+        <b-avatar class="mr-2"></b-avatar>
+        <p class="my-auto">
+          {{ user.nickname }}
+        </p>
       </b-list-group-item>
     </b-list-group>
   </form>
@@ -22,9 +33,11 @@ export default {
   },
   data() {
     return {
-      users: {}
+      users: [],
+      addUser: true
     }
   },
+  computed: {},
   created() {
     this.fetchUsers()
   },
@@ -34,12 +47,7 @@ export default {
         const { data } = await this.$http.group.getParticipants(
           this.modalProps.groupId
         )
-        this.users = data.reduce((acc, user) => {
-          // eslint-disable-next-line
-          if (!this.modalProps.userList.hasOwnProperty(user.id))
-            acc[user.id] = user.nickname
-          return acc
-        }, {})
+        this.users = data
       } catch (error) {
         this.$alert.display(error)
       }
@@ -52,8 +60,19 @@ export default {
         }
         await this.$http.chat.addParticipant(data)
 
-        delete this.users[id]
-        this.users = JSON.parse(JSON.stringify(this.users))
+        // delete this.availableUsers[id]
+        // this.availableUsers = JSON.parse(JSON.stringify(this.availableUsers))
+      } catch (error) {
+        this.$alert.display(error)
+      }
+    },
+    async removeParticipant(id) {
+      try {
+        const data = {
+          participantId: parseInt(id),
+          conversationId: this.modalProps.id
+        }
+        await this.$http.chat.removeParticipant(data)
       } catch (error) {
         this.$alert.display(error)
       }

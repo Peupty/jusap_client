@@ -48,6 +48,7 @@ export default {
     },
     async createLayout() {
       try {
+        if (!this.layout.name.trim().length) return
         const layout = layoutFactory.create(this.layout)
 
         await this.$store.dispatch('settings/createLayout', layout)

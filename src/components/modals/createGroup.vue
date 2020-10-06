@@ -38,7 +38,7 @@
       class="form-check-input"
       v-model="group.accept"
     >
-      Require accept
+      Manually confirm join requests
     </b-form-checkbox>
     <b-form-checkbox
       name="questionnaire"

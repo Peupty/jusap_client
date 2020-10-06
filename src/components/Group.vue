@@ -1,22 +1,23 @@
 <template>
   <div class="group" :style="{ background: group.color }">
     <div class="group__toolbar py-2 px-2">
-      <h5>{{ group.name }} | {{ user.nickname }}</h5>
-      <div>
-        <b-button-group>
-          <b-button
-            variant="primary"
-            class="settings"
-            v-if="isAdmin"
-            @click.prevent="openSettings(group)"
-          >
-            settings
-          </b-button>
-          <b-button variant="primary" @click.prevent="refresh"
-            >refresh</b-button
-          >
-        </b-button-group>
+      <div class="group__info">
+        <b-avatar class="mr-2"></b-avatar>
+        <h5 class="my-auto">{{ user.nickname }}</h5>
+        <b-avatar class="mx-2"></b-avatar>
+        <h5 class="my-auto">{{ group.name }}</h5>
       </div>
+      <b-button-group>
+        <b-button
+          variant="primary"
+          class="settings"
+          v-if="isAdmin"
+          @click.prevent="openSettings(group)"
+        >
+          settings
+        </b-button>
+        <b-button variant="primary" @click.prevent="refresh">refresh</b-button>
+      </b-button-group>
     </div>
     <form @submit.prevent="addPost" class="mt-2 mx-3">
       <b-input-group>
@@ -117,7 +118,6 @@ export default {
 .group {
   overflow: hidden;
   height: 100%;
-  padding-bottom: 20px;
   border: 1px solid #000;
   display: flex;
   flex-direction: column;
@@ -134,6 +134,11 @@ export default {
     flex-direction: column;
     height: 100%;
     overflow: auto;
+  }
+  &__info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 }
 form {

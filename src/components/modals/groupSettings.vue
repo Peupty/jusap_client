@@ -2,8 +2,9 @@
   <form class="groupSettings col" @submit.prevent="save">
     <h3>{{ data.name }}</h3>
     <GroupJoinRequests
+      @remove-user="onRemoveUser"
       :requests="requests"
-      @user-accept="onUserAccept"
+      :id="data.id"
     ></GroupJoinRequests>
     <b-button type="submit" variant="primary" class="save">Save</b-button>
   </form>
@@ -51,8 +52,8 @@ export default {
         this.$alert.display(error)
       }
     },
-    onUserAccept(users) {
-      this.users = users
+    onRemoveUser(user) {
+      this.requests.splice(user)
     }
   }
 }
